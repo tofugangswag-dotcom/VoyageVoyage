@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label text="Agence VoyageVoyage" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <HBox spacing="10">
+            <TextField fx:id="searchField" promptText="Rechercher par destination..."/>
+            <Button fx:id="addVoyageBtn" text="Ajouter Voyage"/>
+            <Button fx:id="refreshBtn" text="Actualiser"/>
+        </HBox>
+        <TableView fx:id="voyagesTable">
+            <columns>
+                <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="titreCol" text="Titre" prefWidth="150"/>
+                <TableColumn fx:id="destCol" text="Destination" prefWidth="120"/>
+                <TableColumn fx:id="prixCol" text="Prix Total (€)" prefWidth="100"/>
+                <TableColumn fx:id="detailsCol" text="Détails" prefWidth="200"/>
+            </columns>
+        </TableView>
+        <HBox spacing="10">
+            <Button fx:id="reserverBtn" text="Réserver Sélectionné"/>
+            <Label fx:id="totalLabel" text="Total: 0 €"/>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+</VBox>

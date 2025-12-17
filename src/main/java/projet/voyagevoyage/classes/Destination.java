@@ -1,7 +1,7 @@
 package projet.voyagevoyage.classes;
 
 public class Destination {
-    private int id;
+    private final int id;
     private String pays;
     private String ville;
 
@@ -25,5 +25,9 @@ public class Destination {
                 ", pays='" + pays + '\'' +
                 ", ville='" + ville + '\'' +
                 '}';
+    }
+
+    public String getNomVille() {
+        return "";
     }
 }
