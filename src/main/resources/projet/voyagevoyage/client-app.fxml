@@ -4,26 +4,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" spacing="10"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="projet.voyagevoyage.ClientAppController">
     <children>
-        <Label text="Agence VoyageVoyage" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Label text="Agence VoyageVoyage"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
         <HBox spacing="10">
-            <TextField fx:id="searchField" promptText="Rechercher par destination..."/>
-            <Button fx:id="addVoyageBtn" text="Ajouter Voyage"/>
-            <Button fx:id="refreshBtn" text="Actualiser"/>
+            <children>
+                <TextField fx:id="searchField"
+                           promptText="Rechercher par destination ou titre..."/>
+                <Button fx:id="addVoyageBtn" text="Ajouter Voyage"/>
+                <Button fx:id="refreshBtn" text="Actualiser"/>
+            </children>
         </HBox>
-        <TableView fx:id="voyagesTable">
+        <TableView fx:id="voyagesTable" prefHeight="500.0" prefWidth="800.0">
             <columns>
                 <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
                 <TableColumn fx:id="titreCol" text="Titre" prefWidth="150"/>
                 <TableColumn fx:id="destCol" text="Destination" prefWidth="120"/>
-                <TableColumn fx:id="prixCol" text="Prix Total (€)" prefWidth="100"/>
-                <TableColumn fx:id="detailsCol" text="Détails" prefWidth="200"/>
+                <TableColumn fx:id="prixCol" text="Prix Total (€)" prefWidth="120"/>
+                <TableColumn fx:id="detailsCol" text="Détails" prefWidth="260"/>
             </columns>
         </TableView>
         <HBox spacing="10">
-            <Button fx:id="reserverBtn" text="Réserver Sélectionné"/>
-            <Label fx:id="totalLabel" text="Total: 0 €"/>
+            <children>
+                <Button fx:id="reserverBtn" text="Réserver Sélectionné"/>
+                <Label fx:id="totalLabel" text="Total voyages: 0"/>
+            </children>
         </HBox>
     </children>
     <padding>

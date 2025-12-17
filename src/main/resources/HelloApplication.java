@@ -8,14 +8,19 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
-        // ... existing code ...
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("client-app.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(
+                HelloApplication.class.getResource("client-app.fxml")
+        );
         Scene scene = new Scene(fxmlLoader.load(), 1100, 720);
-        stage.setTitle("VoyageVoyage");
+        stage.setTitle("VoyageVoyage - Agence de voyage");
         stage.setScene(scene);
         stage.show();
-        // ... existing code ...
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
