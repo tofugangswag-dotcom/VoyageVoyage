@@ -14,9 +14,7 @@ public class Voyage implements Tarifable {
     // 🔹 Durée du séjour en jours
     private int dureeSejour;
 
-    /**
-     * Constructeur COMPLET (recommandé)
-     */
+
     public Voyage(int id,
                   String titre,
                   String description,
@@ -34,10 +32,7 @@ public class Voyage implements Tarifable {
         this.dureeSejour = dureeSejour > 0 ? dureeSejour : 1;
     }
 
-    /**
-     * 🔹 Constructeur de compatibilité (ancien code)
-     * Par défaut : 1 jour de séjour
-     */
+
     public Voyage(int id,
                   String titre,
                   String description,
@@ -48,7 +43,6 @@ public class Voyage implements Tarifable {
         this(id, titre, description, destination, vol, hotel, 1);
     }
 
-    // ================= GETTERS / SETTERS =================
 
     public int getId() {
         return id;
@@ -84,7 +78,6 @@ public class Voyage implements Tarifable {
         }
     }
 
-    // ================= LOGIQUE MÉTIER =================
 
     @Override
     public double calculerPrixTotal() {
