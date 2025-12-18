@@ -64,9 +64,9 @@ public class ClientAppController implements Initializable {
                 LocalDate.now().plusDays(37),
                 800);
         Hotel hotel1 = new Hotel(1, "Hotel Ynoved",
-                "23 rue du omg jsui dans la sauce pour la poo",
+                "23 rue de la poo",
                 1400);
-        Voyage voyage1 = new Voyage(1, "Vroum Vroum", "Séjour complet",
+        Voyage voyage1 = new Voyage(1, "Gotham City", "Séjour complet",
                 dest1, vol1, hotel1);
         voyagesData.add(voyage1);
 
@@ -117,7 +117,7 @@ public class ClientAppController implements Initializable {
         dialog.showAndWait().ifPresent(nbStr -> {
             try {
                 int nb = Integer.parseInt(nbStr);
-                Client client = new Client(1, "Matteo", "Abdel", "john@exemple.com");
+                Client client = new Client(1, "Matteo Hypolite-Eude", "De la haute valée", "john@exemple.com");
                 Reservation res = new Reservation(1, client, selected,
                         LocalDate.now(), nb);
                 double prix = res.calculerPrixTotal();
