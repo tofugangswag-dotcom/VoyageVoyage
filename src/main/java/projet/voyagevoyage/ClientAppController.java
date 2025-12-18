@@ -28,27 +28,37 @@ public class ClientAppController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // mapping colonnes -> propriétés du modèle
+
         idCol.setCellValueFactory(cell ->
-                new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getId()).asObject());
+                new javafx.beans.property.SimpleIntegerProperty(
+                        cell.getValue().getId()).asObject());
+
         titreCol.setCellValueFactory(cell ->
-                new javafx.beans.property.SimpleStringProperty(cell.getValue().getTitre()));
+                new javafx.beans.property.SimpleStringProperty(
+                        cell.getValue().getTitre()));
+
         destCol.setCellValueFactory(cell ->
                 new javafx.beans.property.SimpleStringProperty(
                         cell.getValue().getDestination().getNomVille()));
+
         prixCol.setCellValueFactory(cell ->
                 new javafx.beans.property.SimpleDoubleProperty(
                         cell.getValue().calculerPrixTotal()).asObject());
+
         detailsCol.setCellValueFactory(cell ->
                 new javafx.beans.property.SimpleStringProperty(
-                        "Vol: " + cell.getValue().getVol().getCompagnie()
-                                + ", Hôtel: " + cell.getValue().getHotel().getNom()));
+                        "Durée: " + cell.getValue().getDureeSejour() + " jours | " +
+                                "Vol: " + cell.getValue().getVol().getCompagnie() +
+                                " | Hôtel: " + cell.getValue().getHotel().getNom()
+                ));
 
         voyagesTable.setItems(voyagesData);
 
         chargerVoyagesExemple();
 
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filtrerVoyages(newVal));
+        searchField.textProperty().addListener(
+                (obs, oldVal, newVal) -> filtrerVoyages(newVal));
+
         refreshBtn.setOnAction(e -> chargerVoyagesExemple());
         reserverBtn.setOnAction(e -> reserverVoyage());
         addVoyageBtn.setOnAction(e -> ajouterVoyageSimple());
@@ -57,20 +67,24 @@ public class ClientAppController implements Initializable {
     private void chargerVoyagesExemple() {
         voyagesData.clear();
 
-        // Voyage 1 : issu de ton Main.java
-        Destination dest1 = new Destination(1, "bengladesh", "Bordeaux City");
+        Destination dest1 = new Destination(1, "Bangladesh", "Bordeaux City");
         Vol vol1 = new Vol(1, "InchallaSaVol",
                 LocalDate.now(),
                 LocalDate.now().plusDays(37),
                 800);
         Hotel hotel1 = new Hotel(1, "Hotel Ynoved",
-                "23 rue de la poo",
+                "23 rue de la POO",
                 1400);
-        Voyage voyage1 = new Voyage(1, "Gotham City", "Séjour complet",
-                dest1, vol1, hotel1);
+
+        Voyage voyage1 = new Voyage(
+                1,
+                "Gotham City",
+                "Séjour complet",
+                dest1, vol1, hotel1,
+                7 // 🔹 durée du séjour
+        );
         voyagesData.add(voyage1);
 
-        // Voyage 2 : autre exemple
         Destination dest2 = new Destination(2, "France", "Paris");
         Vol vol2 = new Vol(2, "AirPOO",
                 LocalDate.now().plusDays(10),
@@ -79,12 +93,18 @@ public class ClientAppController implements Initializable {
         Hotel hotel2 = new Hotel(2, "Hotel Eiffel",
                 "5 avenue de la JavaFX",
                 600);
-        Voyage voyage2 = new Voyage(2, "Week-end à Paris", "City trip",
-                dest2, vol2, hotel2);
+
+        Voyage voyage2 = new Voyage(
+                2,
+                "Week-end à Paris",
+                "City trip",
+                dest2, vol2, hotel2,
+                3
+        );
         voyagesData.add(voyage2);
 
         totalLabel.setText("Total voyages: " + voyagesData.size());
-        voyagesTable.setItems(voyagesData);
+        voyagesTable.refresh();
     }
 
     private void filtrerVoyages(String query) {
@@ -103,38 +123,59 @@ public class ClientAppController implements Initializable {
     private void reserverVoyage() {
         Voyage selected = voyagesTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                    "Sélectionne d'abord un voyage.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.WARNING,
+                    "Sélectionne d'abord un voyage.").showAndWait();
             return;
         }
 
-        TextInputDialog dialog = new TextInputDialog("1");
-        dialog.setTitle("Réservation");
-        dialog.setHeaderText("Réserver " + selected.getTitre());
-        dialog.setContentText("Nombre de personnes :");
+        TextInputDialog dureeDialog =
+                new TextInputDialog(String.valueOf(selected.getDureeSejour()));
+        dureeDialog.setTitle("Durée du séjour");
+        dureeDialog.setHeaderText("Modifier la durée du séjour");
+        dureeDialog.setContentText("Nombre de jours :");
 
-        dialog.showAndWait().ifPresent(nbStr -> {
+        dureeDialog.showAndWait().ifPresent(dureeStr -> {
             try {
-                int nb = Integer.parseInt(nbStr);
-                Client client = new Client(1, "Matteo Hypolite-Eude", "De la haute valée", "john@exemple.com");
-                Reservation res = new Reservation(1, client, selected,
-                        LocalDate.now(), nb);
-                double prix = res.calculerPrixTotal();
+                int duree = Integer.parseInt(dureeStr);
+                selected.setDureeSejour(duree);
+                voyagesTable.refresh();
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Réservation confirmée");
-                alert.setHeaderText("Réservation enregistrée");
-                alert.setContentText(
-                        "Client: " + client.getPrenom() + " " + client.getNom() +
-                                "\nVoyage: " + selected.getTitre() +
-                                "\nPersonnes: " + nb +
-                                "\nTotal: " + prix + " €"
-                );
-                alert.showAndWait();
+                TextInputDialog nbDialog = new TextInputDialog("1");
+                nbDialog.setTitle("Réservation");
+                nbDialog.setHeaderText("Nombre de personnes");
+                nbDialog.setContentText("Personnes :");
+
+                nbDialog.showAndWait().ifPresent(nbStr -> {
+                    int nb = Integer.parseInt(nbStr);
+
+                    Client client = new Client(
+                            1,
+                            "Matteo",
+                            "Hypolite-Eude",
+                            "john@exemple.com"
+                    );
+
+                    Reservation res = new Reservation(
+                            1, client, selected,
+                            LocalDate.now(), nb);
+
+                    double prix = res.calculerPrixTotal();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Réservation confirmée");
+                    alert.setHeaderText("Réservation enregistrée");
+                    alert.setContentText(
+                            "Voyage: " + selected.getTitre() +
+                                    "\nDurée: " + selected.getDureeSejour() + " jours" +
+                                    "\nPersonnes: " + nb +
+                                    "\nTotal: " + prix + " €"
+                    );
+                    alert.showAndWait();
+                });
+
             } catch (NumberFormatException e) {
-                Alert error = new Alert(Alert.AlertType.ERROR, "Nombre invalide.");
-                error.showAndWait();
+                new Alert(Alert.AlertType.ERROR,
+                        "Valeur invalide.").showAndWait();
             }
         });
     }
@@ -146,6 +187,7 @@ public class ClientAppController implements Initializable {
         dialog.setContentText("Titre du voyage :");
 
         dialog.showAndWait().ifPresent(titre -> {
+
             Destination dest = new Destination(99, "France", "Bordeaux");
             Vol vol = new Vol(99, "CompagnieX",
                     LocalDate.now(),
@@ -154,15 +196,18 @@ public class ClientAppController implements Initializable {
             Hotel hotel = new Hotel(99, "Hotel Simple",
                     "Adresse inconnue",
                     500);
+
             Voyage v = new Voyage(
                     voyagesData.size() + 1,
                     titre,
                     "Voyage ajouté depuis l'UI",
-                    dest, vol, hotel
+                    dest, vol, hotel,
+                    5
             );
+
             voyagesData.add(v);
             totalLabel.setText("Total voyages: " + voyagesData.size());
-            voyagesTable.setItems(voyagesData);
+            voyagesTable.refresh();
         });
     }
 }
